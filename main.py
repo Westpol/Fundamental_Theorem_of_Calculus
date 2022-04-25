@@ -22,6 +22,12 @@ class FundamentalTheoremOfCalculus(Scene):
         self.wait(1)
         self.play(Transform(title, upperCorner))
         self.wait(1)
+        nl = ImageMobject(r"assets\Newton+Leibnitz.png")
+        nl.scale(1.2)
+        nl.to_edge(RIGHT, buff=1)
+        self.play(FadeIn(nl))
+        self.wait(1)
+        self.play(FadeOut(nl))
 
         self.play(Unwrite(title))
         title = Tex(r"II. Riemann-Integral", font_size=86)
