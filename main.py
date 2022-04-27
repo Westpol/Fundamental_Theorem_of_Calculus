@@ -1,4 +1,5 @@
 from manim import *
+import os
 
 
 class FundamentalTheoremOfCalculus(Scene):
@@ -22,12 +23,16 @@ class FundamentalTheoremOfCalculus(Scene):
         self.wait(1)
         self.play(Transform(title, upperCorner))
         self.wait(1)
-        nl = ImageMobject(r"assets\Newton+Leibnitz.png")
+        nl = ImageMobject(os.path.normpath("assets/Newton+Leibnitz.png"))
         nl.scale(1.2)
         nl.to_edge(RIGHT, buff=1)
         self.play(FadeIn(nl))
         self.wait(1)
         self.play(FadeOut(nl))
+        fact = Tex(r"\huge Anfang:\normalsize\\Um 1600-1700 mit Gottfried Leibniz und Isaac Newton").move_to([0, 2.5, 0])
+        self.play(Write(fact))
+        self.wait(1)
+        self.play(Unwrite(fact))
 
         self.play(Unwrite(title))
         title = Tex(r"II. Riemann-Integral", font_size=86)
@@ -35,6 +40,38 @@ class FundamentalTheoremOfCalculus(Scene):
         self.play(Write(title))
         self.wait(1)
         self.play(Transform(title, upperCorner))
+        ax = Axes(
+            x_range=[0, 3],
+            y_range=[0, 6],
+            x_axis_config={"numbers_to_include": [1, 3]},
+            tips=False,
+        )
+        labels = ax.get_axis_labels()
+        f = ax.plot(lambda x: (x - 2)**3 + 2 * (x - 2)**2 + 1, x_range=[0, 3], color=BLUE_C)
+        fa = ax.plot(lambda x: (1/4) * x**4 + (-4 / 3) * x**3 + 2 * x**2 + x, x_range=[0, 3], color=RED_C)
+        riemann_5 = ax.get_riemann_rectangles(f, x_range=[0, 3], dx=0.5, color=BLUE, fill_opacity=0.5)
+        riemann_1 = ax.get_riemann_rectangles(f, x_range=[0, 3], dx=0.1, color=BLUE, fill_opacity=0.5)
+        riemann_02 = ax.get_riemann_rectangles(f, x_range=[0, 3], dx=0.02, color=BLUE, fill_opacity=0.5)
+        riemann_inf = ax.get_area(f, [0, 3], color=BLUE, fill_opacity=0.5)
+        dx_5 = Tex(r"dx = 0.5")
+        dx_1 = Tex(r"dx = 0.1")
+        dx_02 = Tex(r"dx = 0.02")
+        dx_inf = Tex(r"dx $\to$ 0")
+        self.play(Write(ax), Write(labels))
+        self.wait(1)
+        self.play(Create(f))
+        self.wait(1)
+        self.play(Write(riemann_5), Write(dx_5))
+        self.wait(1)
+        self.play(Transform(riemann_5, riemann_1), Transform(dx_5, dx_1))
+        self.wait(1)
+        self.play(Transform(riemann_5, riemann_02), Transform(dx_5, dx_02))
+        self.wait(1)
+        self.play(Unwrite(riemann_5), Write(riemann_inf), Transform(dx_5, dx_inf))
+        self.wait(1)
+        self.play(Create(fa))
+        self.wait(2)
+        self.play(Unwrite(fa), Unwrite(f), Unwrite(ax), Unwrite(labels), Unwrite(riemann_5), Unwrite(dx_5))
 
         self.play(Unwrite(title))
         title = Tex(r"III. Mittelwertsatz der\\Integralrechnung", font_size=86)
