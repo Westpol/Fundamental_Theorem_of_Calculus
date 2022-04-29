@@ -29,7 +29,8 @@ class FundamentalTheoremOfCalculus(Scene):
         self.play(FadeIn(nl))
         self.wait(1)
         self.play(FadeOut(nl))
-        fact = Tex(r"\huge Anfang:\normalsize\\Um 1600-1700 mit Gottfried Leibniz und Isaac Newton").move_to([0, 2.5, 0])
+        fact = Tex(r"\huge Anfang:\normalsize\\Um 1600-1700 mit Gottfried Leibniz und Isaac Newton").move_to(
+            [0, 2.5, 0])
         self.play(Write(fact))
         self.wait(1)
         self.play(Unwrite(fact))
@@ -47,8 +48,8 @@ class FundamentalTheoremOfCalculus(Scene):
             tips=False,
         )
         labels = ax.get_axis_labels()
-        f = ax.plot(lambda x: (x - 2)**3 + 2 * (x - 2)**2 + 1, x_range=[0, 3], color=BLUE_C)
-        fa = ax.plot(lambda x: (1/4) * x**4 + (-4 / 3) * x**3 + 2 * x**2 + x, x_range=[0, 3], color=RED_C)
+        f = ax.plot(lambda x: (x - 2) ** 3 + 2 * (x - 2) ** 2 + 1, x_range=[0, 3], color=BLUE_C)
+        fa = ax.plot(lambda x: (1 / 4) * x ** 4 + (-4 / 3) * x ** 3 + 2 * x ** 2 + x, x_range=[0, 3], color=RED_C)
         riemann_5 = ax.get_riemann_rectangles(f, x_range=[0, 3], dx=0.5, color=BLUE, fill_opacity=0.5)
         riemann_1 = ax.get_riemann_rectangles(f, x_range=[0, 3], dx=0.1, color=BLUE, fill_opacity=0.5)
         riemann_02 = ax.get_riemann_rectangles(f, x_range=[0, 3], dx=0.02, color=BLUE, fill_opacity=0.5)
@@ -71,7 +72,7 @@ class FundamentalTheoremOfCalculus(Scene):
         self.wait(1)
         self.play(Create(fa))
         self.wait(2)
-        self.play(Unwrite(fa), Unwrite(f), Unwrite(ax), Unwrite(labels), Unwrite(riemann_5), Unwrite(dx_5))
+        self.play(Unwrite(fa), Unwrite(f), Unwrite(ax), Unwrite(labels), Unwrite(riemann_5), Unwrite(dx_5), Unwrite(riemann_inf))
 
         self.play(Unwrite(title))
         title = Tex(r"III. Mittelwertsatz der\\Integralrechnung", font_size=86)
@@ -86,5 +87,16 @@ class FundamentalTheoremOfCalculus(Scene):
         self.play(Write(title))
         self.wait(1)
         self.play(Transform(title, upperCorner))
+
+        Theorie = Tex(r'''Gegeben ist die in $\mathbb{R}$ definierte Funktion $f$ in einem geschlossenen Intervall $[a, b]$. Sei $F$ definiert für alle $x$ im Intervall $[a, b]$ durch \\
+        \begin{equation*}
+        F(x)=\int_{a}^{x}f(t) dt
+        \end{equation*}
+        Dann ist $F$ gleichmäßig stetig auf dem Intervall $[a, b]$ und differenzierbar auf dem offenen Intervall $(a, b)$, und 
+        \begin{equation*}
+        F'(x)=f(x)
+        \end{equation*}
+        Für alle $x$ in $(a, b)$, sodass $F$ eine Stammfunktion von $f$ ist.''')
+        self.play(Write(Theorie))
 
         self.wait(5)
