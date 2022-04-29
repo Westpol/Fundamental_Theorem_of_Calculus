@@ -44,7 +44,6 @@ class FundamentalTheoremOfCalculus(Scene):
         ax = Axes(
             x_range=[0, 3],
             y_range=[0, 6],
-            x_axis_config={"numbers_to_include": [1, 3]},
             tips=False,
         )
         labels = ax.get_axis_labels()
@@ -70,7 +69,10 @@ class FundamentalTheoremOfCalculus(Scene):
         self.wait(1)
         self.play(Unwrite(riemann_5), Write(riemann_inf), Transform(dx_5, dx_inf))
         self.wait(1)
-        self.play(Create(fa))
+        self.play(Unwrite(riemann_inf))
+        riemann_inf = ax.get_area(f, [0, 3], color=BLUE, fill_opacity=0.5)
+        self.wait(1)
+        self.play(Create(fa), Write(riemann_inf))
         self.wait(2)
         self.play(Unwrite(fa), Unwrite(f), Unwrite(ax), Unwrite(labels), Unwrite(riemann_5), Unwrite(dx_5), Unwrite(riemann_inf))
 
