@@ -44,7 +44,7 @@ class FundamentalTheoremOfCalculus(Scene):
         ax = Axes(
             x_range=[0, 3],
             y_range=[0, 6],
-            tips=False,
+            tips=True,
         )
         labels = ax.get_axis_labels()
         f = ax.plot(lambda x: (x - 2) ** 3 + 2 * (x - 2) ** 2 + 1, x_range=[0, 3], color=BLUE_C)
@@ -90,7 +90,7 @@ class FundamentalTheoremOfCalculus(Scene):
         self.wait(1)
         self.play(Transform(title, upperCorner))
 
-        Theorie = Tex(r'''Gegeben ist die in $\mathbb{R}$ definierte Funktion $f$ in einem geschlossenen Intervall $[a, b]$. Sei $F$ definiert für alle $x$ im Intervall $[a, b]$ durch \\
+        Theorie = Tex(r'''\Huge Satz I \\ \normalsize Gegeben ist die in $\mathbb{R}$ definierte Funktion $f$ in einem geschlossenen\\ Intervall $[a, b]$. Sei $F$ definiert für alle $x$ im Intervall $[a, b]$ durch \\
         \begin{equation*}
         F(x)=\int_{a}^{x}f(t) dt
         \end{equation*}
@@ -98,7 +98,55 @@ class FundamentalTheoremOfCalculus(Scene):
         \begin{equation*}
         F'(x)=f(x)
         \end{equation*}
-        Für alle $x$ in $(a, b)$, sodass $F$ eine Stammfunktion von $f$ ist.''')
+        Für alle $x$ in $(a, b)$, sodass $F$ eine Stammfunktion von $f$ ist.''').scale(0.8)
         self.play(Write(Theorie))
+
+        self.wait(1)
+        Bew = Tex(r"\Huge Beweis I", ).scale(0.8).move_to([0, 3.5, 0])
+        self.play(Transform(Theorie, Bew))
+        p1 = Tex(r'''Für ein gegebenes $f(t)$ sei die Funktion $F(x)$ definiert als
+        \begin{equation*}
+            F(x)=\int_{a}^{x}f(t)dt
+        \end{equation*}''')
+        self.play(Write(p1))
+        self.wait(1)
+        self.play(Unwrite(p1))
+
+        p2 = Tex(r'''Für jegliche 2 Zahlen $x_1$ und $\Delta x$ im Intervall $[a, b]$ ergibt sich
+        \begin{equation*}
+            F(x_1)=\int_{a}^{x_1}f(f)dt
+        \end{equation*}
+        und
+        \begin{equation*}
+            F(x_1+\Delta x)=\int_{a}^{x_1+\Delta x}f(t)dt
+        \end{equation*}''')
+        self.play(Write(p2))
+        self.wait(1)
+        self.play(Unwrite(p2))
+        ax1 = Axes(
+            x_range=[0, 3],
+            y_range=[0, 3],
+            tips=True,
+        ).scale(0.45).move_to([0, 1.6, 0])
+        ax2 = Axes(
+            x_range=[0, 3],
+            y_range=[0, 3],
+            tips=True,
+        ).scale(0.45).move_to([0, -1.6, 0])
+        func1 = ax1.plot(lambda x: (x/2) ** 2 + 1)
+        func2 = ax2.plot(lambda x: (x/2) ** 2 + 1)
+        labels = [ax1.get_axis_labels(), ax2.get_axis_labels()]
+        self.play(Write(ax1), Write(ax2), Write(labels[0]), Write(labels[1]))
+        self.play(Write(func1), Write(func2))
+        e1 = MathTex(r"\int_{a}^{x_1}f(f)dt").scale(0.75).move_to([-0.8, 0.8, 0])
+        e2 = MathTex(r"\int_{a}^{x_1+\Delta x}f(t)dt").scale(0.75).move_to([-0.3, -2.35, 0])
+        t_label_1 = ax1.get_T_label(x_val=2, graph=func1, label=MathTex(r"x_1"))
+        t_label_2 = ax2.get_T_label(x_val=2.5, graph=func2, label=MathTex(r"x_1+\Delta x"))
+        self.play(Write(t_label_1))
+        self.play(Write(t_label_2))
+        ar1 = ax1.get_area(func1, [0, 2], color=RED_C, fill_opacity=0.5)
+        ar2 = ax2.get_area(func2, [0, 2.5], color=BLUE_C, fill_opacity=0.5)
+        self.play(Write(ar1), Write(ar2))
+        self.play(Write(e1), Write(e2))
 
         self.wait(5)
