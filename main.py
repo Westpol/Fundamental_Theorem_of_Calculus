@@ -135,8 +135,7 @@ class FundamentalTheoremOfCalculus(Scene):
         ).scale(0.45).move_to([0, -1.6, 0])
         func1 = ax1.plot(lambda x: (x/2) ** 2 + 1)
         func2 = ax2.plot(lambda x: (x/2) ** 2 + 1)
-        labels = [ax1.get_axis_labels(), ax2.get_axis_labels()]
-        self.play(Write(ax1), Write(ax2), Write(labels[0]), Write(labels[1]))
+        self.play(Write(ax1), Write(ax2))
         self.play(Write(func1), Write(func2))
         e1 = MathTex(r"\int_{a}^{x_1}f(f)dt").scale(0.75).move_to([-0.8, 0.8, 0])
         e2 = MathTex(r"\int_{a}^{x_1+\Delta x}f(t)dt").scale(0.75).move_to([-0.3, -2.35, 0])
@@ -148,5 +147,20 @@ class FundamentalTheoremOfCalculus(Scene):
         ar2 = ax2.get_area(func2, [0, 2.5], color=BLUE_C, fill_opacity=0.5)
         self.play(Write(ar1), Write(ar2))
         self.play(Write(e1), Write(e2))
+        everything = VGroup(e1, e2, t_label_1, t_label_2, ax1, ax2, ar1, ar2, func1, func2)
+        # noinspection PyTypeChecker
+        prevBox = Rectangle(width=3, height=2.5, color=ORANGE).move_to([6.5, -3.3, 0])
+        self.play(everything.animate.scale(0.2).move_to([6, -3, 0]), Write(prevBox))
+        self.wait(1)
+
+        p3 = Tex(r'''Wenn diese beiden Gleichungen nun subtrahiert werden, dann ergibt sich
+        \begin{equation}
+            F(x_1+\Delta x)-F(x_1)=\int_{a}^{x_1+\Delta x}f(t)dt-\int_{a}^{x_1}f(t)dt
+        \end{equation}''').scale(0.8)
+        self.play(Write(p3))
+        self.wait(1)
+        self.play(Unwrite(p3))
+        self.play(everything.animate.scale(5).move_to([0, 0, 0]))
+        self.play(ar1.animate.move_to([-0.85, -1.7, 0]))
 
         self.wait(5)
