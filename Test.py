@@ -44,7 +44,7 @@ class PlotTwoGraphsAtOnce(Scene):
         self.play(everything.animate.scale(0.2).move_to([6, -3, 0]), Write(prevBox))
         self.wait(1)
 
-        p3 = Tex(r'''Wenn diese beiden Gleichungen nun subtrahiert werden, dann ergibt sich
+        p3 = Tex(r'''
                 \begin{equation*}
                     F(x_1+\Delta x)-F(x_1)=\int_{a}^{x_1+\Delta x}f(t)dt-\int_{a}^{x_1}f(t)dt
                 \end{equation*}''').scale(0.8)
@@ -181,8 +181,130 @@ class PlotTwoGraphsAtOnce(Scene):
         self.play(Unwrite(p6))
         self.wait(1)
 
-        p7 = Tex(r'''Nun wird die Gleichung durch $\Delta x$ geteilt und man erhält:
+        p7 = Tex(r'''
         \begin{equation*}
             \frac{F(x_1+\Delta x)-F(x_1)}{\Delta x}=f(c)
+        \end{equation*}''').scale(0.8)
+        self.play(Write(p7))
+        self.wait(1)
+        self.play(Unwrite(p7))
+        self.wait(1)
+
+        p8 = Tex(r'''
+        \begin{equation*}
+            \lim \limits_{\Delta x \to 0} \frac{F(x_1+\Delta x)-F(x_1)}{\Delta x}=\lim \limits_{\Delta x \to 0}f(c)
+        \end{equation*}''').scale(0.8)
+        self.play(Write(p8))
+        self.wait(1)
+        self.play(Unwrite(p8))
+        self.wait(1)
+
+        p9 = Tex(r'''
+        \begin{equation*}
+            \lim \limits_{\Delta x \to 0} \frac{F(x_1+\Delta x)-F(x_1)}{\Delta x}=F'(x_1)
+        \end{equation*}''').scale(0.8)
+        self.play(Write(p9))
+        self.wait(1)
+
+        p10 = Tex(r'''
+        \begin{equation*}
+            F'(x_1)=\lim \limits_{\Delta x \to 0}f(c)
+        \end{equation*}''').scale(0.8)
+        self.play(Transform(p9, p10))
+        self.wait(1)
+        self.play(Unwrite(p9))
+        self.wait(1)
+
+        ax = Axes(
+            x_range=[0, 3],
+            y_range=[0, 3],
+            tips=True
+        )
+        func = ax.plot(lambda x: (x / 2) ** 2 + 1)
+        # noinspection PyTypeChecker
+        ar = ax.get_area(func, [2, 2.5], color=BLUE_C, fill_opacity=0.5)
+
+        def funcc(x):
+            return (x / 2) ** 2 + 1
+
+        t = ValueTracker(2.05)
+        # noinspection PyTypeChecker
+        initial_point = [ax.coords_to_point(t.get_value(), funcc(t.get_value()))]
+        dot = Dot(point=initial_point)
+        dot.add_updater(lambda x: x.move_to(ax.c2p(t.get_value(), funcc(t.get_value()))))
+
+        def get_rectangle():
+            polygon = Polygon(
+                *[
+                    ax.c2p(*i)
+                    for i in self.get_rectangle_corners(
+                        (2, 0), (2.5, funcc(t.get_value()))
+                    )
+                ]
+            )
+            polygon.stroke_width = 1
+            polygon.set_fill(YELLOW, opacity=0.5)
+            return polygon
+
+        polygon = always_redraw(get_rectangle)
+        self.play(Write(ax), Write(func), Write(ar), Write(dot), Write(polygon))
+        self.play(t.animate.set_value(2.45))
+        self.wait(1)
+        self.play(t.animate.set_value(2.05))
+        self.wait(1)
+        self.play(t.animate.set_value(2.2546))
+        self.wait(1)
+        self.play(Unwrite(VGroup(ax, func, ar, dot, polygon)))
+        self.wait(1)
+
+        p11 = Tex(r'''Da $x_1 \leq c \leq x_1+\Delta x$ ist und $\Delta x$ gegen $0$ läuft wird sich $c\to$ $x_1$ nähern
+         bis bei $\Delta x=0$ auch $c = x_1$ ist, beziehungsweise $x_1 \leq c \leq x_1 + 0$ oder $x_1 = c = x_1$ ist.
+         ''').scale(0.8)
+        self.play(Write(p11))
+        self.wait(1)
+        self.play(Unwrite(p11))
+        self.wait(1)
+
+        p12 = Tex(r'''
+        \begin{equation*}
+        \lim \limits_{\Delta x \to 0} f(c) = f(x_1)
+        \end{equation*}''').scale(0.8)
+        self.play(Write(p12))
+        self.wait(1)
+        self.play(Unwrite(p12))
+        self.wait(1)
+
+        p13 = Tex(r'''Zusammenfassend ergibt:
+                \begin{equation*}
+                    F'(x_1)=\lim \limits_{\Delta x \to 0}f(c)
+                \end{equation*}
+                Und
+                \begin{equation*}
+                    \lim \limits_{\Delta x \to 0} f(c) = f(x_1)
+                \end{equation*}
+                und somit
+                \begin{equation*}
+                    F'(x_1)=f(x_1)
+                \end{equation*}''').scale(0.8)
+        #self.add(index_labels(p13[0]))
+        p13[0][22:28].set_color(YELLOW)
+        p13[0][68:74].set_color(YELLOW)
+        p13[0][29:40].set_color(BLUE)
+        p13[0][43:54].set_color(BLUE)
+        p13[0][55:60].set_color(RED)
+        p13[0][75:80].set_color(RED)
+        self.play(Write(p13))
+        self.wait(1)
+
+        p14 = Tex(r'''
+        \begin{equation*}
+            F'(x_1)=f(x_1)
         \end{equation*}
-        ''')
+        oder
+        \begin{equation*}
+            \frac{d}{dx}\int_{a}^{x}f(t)dt=f(x)
+        \end{equation*}''').scale(1.5)
+        self.play(Transform(p13, p14))
+        self.wait(1)
+        self.play(Unwrite(p13))
+        self.wait(1)
